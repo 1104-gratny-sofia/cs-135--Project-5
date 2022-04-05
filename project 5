@@ -1,0 +1,96 @@
+// Author: Sofia Gratny
+// Date: 3/06/2022
+// Purpose: To create a program that encodes a 5 letter word that's stored in a file.
+
+#include <stdio.h>
+#define TOENCODE "to_encode.txt"
+#define ENCODED "encoded.txt"
+
+
+// Prototyping 
+int getletterAndcipher(FILE* ToEncode, char* letter1, char* letter2, char* letter3, char* letter4, char* letter5);
+char encodeCharacter(int cipher, char letter);
+_Bool iscapital(char letter);
+void writeEncodedMessage(FILE* Encoded, char, char, char, char, char);
+
+
+
+
+// Function
+int main()
+{
+int cipher, letterPos;
+	char letter1, letter2, letter3, letter4, letter5;
+	FILE* ToEncode;
+	ToEncode = fopen(TOENCODE, "r");
+	FILE* Encoded;	
+	Encoded = fopen(ENCODED, "w");
+		if (ToEncode == NULL){
+			printf("File to encode could not be found.\n"); }
+	else{
+	cipher = getletterAndcipher(ToEncode, &letter1, &letter2, &letter3, &letter4, &letter5);
+	letter1 = encodeCharacter(cipher, letter1);
+	letter2 = encodeCharacter(cipher, letter2);
+	letter3 = encodeCharacter(cipher, letter3);
+	letter4 = encodeCharacter(cipher, letter4);
+	letter5 = encodeCharacter(cipher, letter5);
+	}
+	
+	if (Encoded == NULL)
+	{
+	printf("File to encode could not be found.\n");
+	}
+	
+	else 
+{
+		writeEncodedMessage(Encoded, letter1, letter2, letter3, letter4, letter5);
+	fclose(Encoded);
+	}
+return 0;
+}
+
+int getletterAndcipher(FILE* ToEncode, char* letter1, char* letter2, char* letter3, char* letter4, char* letter5){
+
+int cipher;
+	fscanf(ToEncode, "%d\n%c%c%c%c%c", &cipher, letter1, letter2, letter3, letter4, letter5);
+
+ return cipher;
+}
+
+// Math time
+
+char encodeCharacter(int cipher, char letter)
+{
+
+	char finalLetter;
+	if(iscapital(letter) == 1 && letter - cipher < 'A'){
+	finalLetter = 'Z' - ('A' - letter + cipher - 1);
+	}
+
+	else if(iscapital(letter) == 0 && letter - cipher < 'a'){
+	finalLetter= 'z' - ('a' - letter + cipher - 1);
+	}
+	else{ 
+	finalLetter = letter - cipher;
+}
+return finalLetter;
+
+}
+
+// Confirming Capital Letter
+_Bool iscapital(char letter){
+
+		if(letter >= 'A' && letter <= 'Z'){
+	return 1;
+}
+
+		else{
+
+	return 0;
+	}
+}
+
+void writeEncodedMessage(FILE* Encoded, char letter1, char letter2, char letter3, char letter4, char letter5){
+fprintf(Encoded, "%c%c%c%c%c", letter1, letter2, letter3, letter4, letter5);
+
+}
